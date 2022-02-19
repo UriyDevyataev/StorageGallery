@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct FileResponse: Codable {
-    let dict: [String: ImageData]
-}
+//struct FileResponse: Codable {
+//    let dict: [String: ImageData]
+//}
 
 struct ImageData : Codable {
+    var photoKey: String?
     let photo_url: String
     let user_name: String
     let user_url: String

@@ -21,8 +21,9 @@ class ContentCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var userLinkButton: UIButton!
     
     static let identifier = "ContentCollectionViewCell"
+        
+    var indexPath: IndexPath?
     
-    var indexPath = IndexPath(row: 0, section: 0)
     var normalEqualWidth: CGFloat?
     var normalEqualWidthConstarint: CGFloat = 0.8
     
@@ -49,6 +50,8 @@ class ContentCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        indexPath = nil
+        imageView.image = nil
         customContentView.alpha = 1
         customContentView.transform = CGAffineTransform.identity
         NSLayoutConstraint.setMultiplier(
