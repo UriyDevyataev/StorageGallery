@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB50E69F27BEBAB800475BEE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50E69E27BEBAB800475BEE /* Extensions.swift */; };
+		CB50E6A127C0E9EB00475BEE /* examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50E6A027C0E9EB00475BEE /* examples.swift */; };
 		CBF2035527BBA172008D5FDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035427BBA172008D5FDB /* AppDelegate.swift */; };
 		CBF2035727BBA172008D5FDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035627BBA172008D5FDB /* SceneDelegate.swift */; };
 		CBF2035927BBA172008D5FDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035827BBA172008D5FDB /* ViewController.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB50E69E27BEBAB800475BEE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		CB50E6A027C0E9EB00475BEE /* examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = examples.swift; sourceTree = "<group>"; };
 		CBF2035127BBA172008D5FDB /* StorageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBF2035427BBA172008D5FDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBF2035627BBA172008D5FDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 				CBF2035D27BBA174008D5FDB /* Assets.xcassets */,
 				CBF2035F27BBA174008D5FDB /* LaunchScreen.storyboard */,
 				CBF2036227BBA174008D5FDB /* Info.plist */,
+				CB50E69E27BEBAB800475BEE /* Extensions.swift */,
+				CB50E6A027C0E9EB00475BEE /* examples.swift */,
 			);
 			path = StorageGallery;
 			sourceTree = "<group>";
@@ -181,8 +187,10 @@
 				CBF2036B27BBA908008D5FDB /* ContentCollectionViewCell.swift in Sources */,
 				CBF2037227BBAD35008D5FDB /* FileResponse.swift in Sources */,
 				CBF2035927BBA172008D5FDB /* ViewController.swift in Sources */,
+				CB50E69F27BEBAB800475BEE /* Extensions.swift in Sources */,
 				CBF2035527BBA172008D5FDB /* AppDelegate.swift in Sources */,
 				CBFED08527BC0F8A0012F5A8 /* WebViewController.swift in Sources */,
+				CB50E6A127C0E9EB00475BEE /* examples.swift in Sources */,
 				CBF2035727BBA172008D5FDB /* SceneDelegate.swift in Sources */,
 				CBF2036E27BBAC74008D5FDB /* DataService.swift in Sources */,
 			);
