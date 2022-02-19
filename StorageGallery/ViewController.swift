@@ -7,28 +7,17 @@
 
 import UIKit
 
-enum Direction {
-    case left
-    case right
-}
-
 class ViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var endOffset: CGFloat = 0.0
-    
-    let colorArray = [UIColor.red, UIColor.blue, UIColor.green, UIColor.magenta, UIColor.yellow, UIColor.gray, UIColor.cyan]
-
     let dataService = DataServiceImp()
     
-    var dataModel = [String: ImageData]()
-    var imageKeys = [String]()
+    var timer: Timer?
+    var endOffset: CGFloat = 0.0
+    
+    var dataModel = [ImageData]()
     var imageDict = [String: UIImage]()
-    
-    var arrayPoints = [CGPoint]()
-    
-    var startPoint = CGPoint.zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,23 +34,17 @@ class ViewController: UIViewController {
         dataService.receiveData {[weak self] dict in
             guard let self = self else {return}
             self.dataModel = dict
-            self.createImageKeys()
-            
+            self.configModelToInfinity()
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
+                self.collectionView.scrollToItem(
+                    at: IndexPath(item: 1, section: 0),
+                    at: .left,
+                    animated: false)
             }
-            
         } error: { err in
             print(err ?? "")
         }
-    }
-    
-    func createImageKeys() {
-        var array = [String]()
-        dataModel.forEach { (key: String, value: ImageData) in
-            array.append(key)
-        }
-        imageKeys = array.sorted{$0 < $1}
     }
     
     func configCollectionView() {
@@ -81,26 +64,28 @@ class ViewController: UIViewController {
         collectionView.contentInsetAdjustmentBehavior = .never
         
         collectionView.register(ContentCollectionViewCell.nib(), forCellWithReuseIdentifier: ContentCollectionViewCell.identifier)
-        
     }
     
     func fill(cell: ContentCollectionViewCell, indexPath: IndexPath) -> UICollectionViewCell {
-
-        let imageKey = imageKeys[indexPath.row]
-        guard let imageData = dataModel[imageKey] else {
-            return UICollectionViewCell()
-        }
         
-        cell.nameLabel.text = imageData.user_name
+        cell.indexPath = indexPath
         
-        if let image = imageDict[imageKeys[indexPath.row]] {
+        let dataImage = dataModel[indexPath.row]
+        cell.nameLabel.text = dataImage.user_name
+        
+        guard let imageKey = dataImage.photoKey else {return UICollectionViewCell()}
+        
+        if let image = imageDict[imageKey] {
             cell.imageView.image = image
         } else {
             dataService.loadImage(imageKey: imageKey) {[weak self] image in
                 guard let self = self else {return}
                 self.imageDict[imageKey] = image
-                DispatchQueue.main.async {
-                    cell.imageView.image = image
+                
+                if cell.indexPath == indexPath {
+                    DispatchQueue.main.async {
+                        cell.imageView.image = image
+                    }
                 }
             }
         }
@@ -108,7 +93,7 @@ class ViewController: UIViewController {
         cell.imageLinkButtonTap = { [weak self] in
             guard let self = self else {return}
             guard let controller = self.prepareWebViewController(
-                startLink: imageData.photo_url) else {
+                startLink: dataImage.photo_url) else {
                     return
                 }
             self.present(controller, animated: true)
@@ -117,13 +102,11 @@ class ViewController: UIViewController {
         cell.userLinkButtonTap = { [weak self] in
             guard let self = self else {return}
             guard let controller = self.prepareWebViewController(
-                startLink: imageData.user_url) else {
+                startLink: dataImage.user_url) else {
                     return
                 }
             self.present(controller, animated: true)
         }
-        
-        cell.indexPath = indexPath
         return cell
     }
     
@@ -138,43 +121,70 @@ class ViewController: UIViewController {
         }
     }
     
-    func getSortedVisibleCells(offset: CGFloat) -> [ContentCollectionViewCell]? {
+    func getSortedVisibleCells(offset: CGFloat) -> [ContentCollectionViewCell] {
         
-        guard let arrayVisibleCells = collectionView.visibleCells as? [ContentCollectionViewCell] else {return nil}
+        var cellArray = [ContentCollectionViewCell]()
         
-        var cellArray : [ContentCollectionViewCell]?
+        guard let arrayVisibleCells = collectionView.visibleCells as? [ContentCollectionViewCell] else {return cellArray}
 
         if offset > 0 {
             cellArray = arrayVisibleCells.sorted{
-                $0.indexPath.row < $1.indexPath.row}
+                $0.indexPath!.row < $1.indexPath!.row}
             as [ContentCollectionViewCell]
         }
 
         if offset < 0 {
             cellArray = arrayVisibleCells.sorted{
-                $0.indexPath.row > $1.indexPath.row}
+                $0.indexPath!.row > $1.indexPath!.row}
             as [ContentCollectionViewCell]
         }
         return cellArray
     }
     
-    func getScale(forOffset: CGFloat, withRange: CGFloat) -> (downScale: CGFloat?, upScale: CGFloat?) {
-        
-        var scale : (downScale: CGFloat?, upScale: CGFloat?) = (nil, nil)
+    func getScale(forOffset: CGFloat, withRange: CGFloat) -> (downScale: CGFloat, upScale: CGFloat) {
         
         let maxScale: CGFloat = 1
         let minScale: CGFloat = maxScale - withRange
+        
+        var scale : (downScale: CGFloat, upScale: CGFloat) = (minScale, maxScale)
         
         let halfWidth = collectionView.frame.width / 2
         let gain = abs(forOffset) / halfWidth
 
         let downScale = maxScale - withRange * gain
-        scale.downScale = downScale > minScale ? downScale : nil
+        scale.downScale = downScale > minScale ? downScale : minScale
     
         let upScale = minScale + withRange * gain
-        scale.upScale = upScale < maxScale ? upScale : nil
+        scale.upScale = upScale < maxScale ? upScale : maxScale
         
         return scale
+    }
+    
+    func configModelToInfinity() {
+        let saveFirst = dataModel.first!
+        dataModel.insert(dataModel.last!, at: 0)
+        dataModel.append(saveFirst)
+    }
+    
+    func createTimer(){
+                    
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(timeInterval: 5,
+                                         target: self,
+                                         selector: #selector(timerInretval),
+                                         userInfo: nil,
+                                         repeats: true)
+    }
+    
+    @objc func timerInretval(){
+        
+        timer?.invalidate()
+        
+        collectionView.scrollToItem(
+            at: IndexPath(item: 1, section: 0),
+            at: .left,
+            animated: true)
     }
 }
 
@@ -201,22 +211,33 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        endOffset = scrollView.contentOffset.x
+        
+        let currentIndexPath = Int(endOffset / collectionView.frame.width)
     
-//        guard let currIndexPath = collectionView.indexPathsForVisibleItems.first else {return}
-    }
-    
-    func isRightDirection(point: CGPoint) -> Direction? {
-        if arrayPoints.count < 2 {
-            arrayPoints.append(point)
-            return nil
-        } else {
-            return arrayPoints[0].x > arrayPoints[1].x ? Direction.left : Direction.right
+        switch currentIndexPath {
+        case 0:
+            
+            collectionView.scrollToItem(
+                at: IndexPath(item: dataModel.count - 2, section: 0),
+                at: .centeredHorizontally,
+                animated: false)
+            
+        case dataModel.count - 1:
+            
+            collectionView.scrollToItem(
+                at: IndexPath(item: 1, section: 0),
+                at: .centeredHorizontally,
+                animated: false)
+            
+        default: break
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        endOffset = scrollView.contentOffset.x
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        createTimer()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -224,20 +245,22 @@ extension ViewController: UICollectionViewDelegate {
         let offset = scrollView.contentOffset.x
         let offsetCell = offset - endOffset
         
-        guard let cellArray = getSortedVisibleCells(offset: offsetCell) else {return}
-        
-        let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
-        let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
-        let parallaxScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
-
-        cellArray[0].sizeScale(value: sizeScaleValue.downScale)
-        cellArray[0].alphaScale(value: alphaScaleValue.downScale)
-        cellArray[0].parallaxScale(value: parallaxScaleValue.downScale)
-
+        let cellArray = getSortedVisibleCells(offset: offsetCell)
         if cellArray.count > 1 {
-            cellArray[1].sizeScale(value: sizeScaleValue.upScale)
-            cellArray[1].alphaScale(value: alphaScaleValue.upScale)
-            cellArray[1].parallaxScale(value: parallaxScaleValue.upScale)
+            
+            let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
+            let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
+            let parallaxScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
+
+            cellArray[0].sizeScale(value: sizeScaleValue.downScale)
+            cellArray[0].alphaScale(value: alphaScaleValue.downScale)
+            cellArray[0].parallaxScale(value: parallaxScaleValue.downScale)
+
+            if cellArray.count > 1 {
+                cellArray[1].sizeScale(value: sizeScaleValue.upScale)
+                cellArray[1].alphaScale(value: alphaScaleValue.upScale)
+                cellArray[1].parallaxScale(value: parallaxScaleValue.upScale)
+            }
         }
     }
 }
