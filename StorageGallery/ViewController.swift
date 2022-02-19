@@ -7,9 +7,16 @@
 
 import UIKit
 
+enum Direction {
+    case left
+    case right
+}
+
 class ViewController: UIViewController {
-    
+
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    var endOffset: CGFloat = 0.0
     
     let colorArray = [UIColor.red, UIColor.blue, UIColor.green, UIColor.magenta, UIColor.yellow, UIColor.gray, UIColor.cyan]
 
@@ -18,6 +25,10 @@ class ViewController: UIViewController {
     var dataModel = [String: ImageData]()
     var imageKeys = [String]()
     var imageDict = [String: UIImage]()
+    
+    var arrayPoints = [CGPoint]()
+    
+    var startPoint = CGPoint.zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,10 +77,11 @@ class ViewController: UIViewController {
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = .clear
         collectionView.contentInsetAdjustmentBehavior = .never
         
         collectionView.register(ContentCollectionViewCell.nib(), forCellWithReuseIdentifier: ContentCollectionViewCell.identifier)
+        
     }
     
     func fill(cell: ContentCollectionViewCell, indexPath: IndexPath) -> UICollectionViewCell {
@@ -110,6 +122,8 @@ class ViewController: UIViewController {
                 }
             self.present(controller, animated: true)
         }
+        
+        cell.indexPath = indexPath
         return cell
     }
     
@@ -122,6 +136,45 @@ class ViewController: UIViewController {
         } else {
             return nil
         }
+    }
+    
+    func getSortedVisibleCells(offset: CGFloat) -> [ContentCollectionViewCell]? {
+        
+        guard let arrayVisibleCells = collectionView.visibleCells as? [ContentCollectionViewCell] else {return nil}
+        
+        var cellArray : [ContentCollectionViewCell]?
+
+        if offset > 0 {
+            cellArray = arrayVisibleCells.sorted{
+                $0.indexPath.row < $1.indexPath.row}
+            as [ContentCollectionViewCell]
+        }
+
+        if offset < 0 {
+            cellArray = arrayVisibleCells.sorted{
+                $0.indexPath.row > $1.indexPath.row}
+            as [ContentCollectionViewCell]
+        }
+        return cellArray
+    }
+    
+    func getScale(forOffset: CGFloat, withRange: CGFloat) -> (downScale: CGFloat?, upScale: CGFloat?) {
+        
+        var scale : (downScale: CGFloat?, upScale: CGFloat?) = (nil, nil)
+        
+        let maxScale: CGFloat = 1
+        let minScale: CGFloat = maxScale - withRange
+        
+        let halfWidth = collectionView.frame.width / 2
+        let gain = abs(forOffset) / halfWidth
+
+        let downScale = maxScale - withRange * gain
+        scale.downScale = downScale > minScale ? downScale : nil
+    
+        let upScale = minScale + withRange * gain
+        scale.upScale = upScale < maxScale ? upScale : nil
+        
+        return scale
     }
 }
 
@@ -152,6 +205,41 @@ extension ViewController: UICollectionViewDelegate {
     
 //        guard let currIndexPath = collectionView.indexPathsForVisibleItems.first else {return}
     }
+    
+    func isRightDirection(point: CGPoint) -> Direction? {
+        if arrayPoints.count < 2 {
+            arrayPoints.append(point)
+            return nil
+        } else {
+            return arrayPoints[0].x > arrayPoints[1].x ? Direction.left : Direction.right
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        endOffset = scrollView.contentOffset.x
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    
+        let offset = scrollView.contentOffset.x
+        let offsetCell = offset - endOffset
+        
+        guard let cellArray = getSortedVisibleCells(offset: offsetCell) else {return}
+        
+        let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
+        let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
+        let parallaxScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
+
+        cellArray[0].sizeScale(value: sizeScaleValue.downScale)
+        cellArray[0].alphaScale(value: alphaScaleValue.downScale)
+        cellArray[0].parallaxScale(value: parallaxScaleValue.downScale)
+
+        if cellArray.count > 1 {
+            cellArray[1].sizeScale(value: sizeScaleValue.upScale)
+            cellArray[1].alphaScale(value: alphaScaleValue.upScale)
+            cellArray[1].parallaxScale(value: parallaxScaleValue.upScale)
+        }
+    }
 }
 
 //MARK: - Extension UICollectionViewDelegateFlowLayout
@@ -161,4 +249,3 @@ extension ViewController: UICollectionViewDelegateFlowLayout  {
         return collectionView.frame.size
     }
 }
-

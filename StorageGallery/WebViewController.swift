@@ -86,7 +86,7 @@ class WebViewController: UIViewController {
     }
     
     @objc func actionStop(){
-        webView.stopLoading()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func actionBack(){
