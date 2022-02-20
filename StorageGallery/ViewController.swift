@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     
     var dataModel = [ImageData]()
     var imageDict = [String: UIImage]()
+    var visibleCell = [ContentCollectionViewCell]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +31,6 @@ class ViewController: UIViewController {
     }
     
     func receiveData() {
-        
         dataService.receiveData {[weak self] dict in
             guard let self = self else {return}
             self.dataModel = dict
@@ -48,7 +48,6 @@ class ViewController: UIViewController {
     }
     
     func configCollectionView() {
-        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -122,7 +121,6 @@ class ViewController: UIViewController {
     }
     
     func getSortedVisibleCells(offset: CGFloat) -> [ContentCollectionViewCell] {
-        
         var cellArray = [ContentCollectionViewCell]()
         
         guard let arrayVisibleCells = collectionView.visibleCells as? [ContentCollectionViewCell] else {return cellArray}
@@ -167,9 +165,7 @@ class ViewController: UIViewController {
     }
     
     func createTimer(){
-                    
         timer?.invalidate()
-        
         timer = Timer.scheduledTimer(timeInterval: 5,
                                          target: self,
                                          selector: #selector(timerInretval),
@@ -178,13 +174,24 @@ class ViewController: UIViewController {
     }
     
     @objc func timerInretval(){
-        
         timer?.invalidate()
-        
+        scrollToStart()
+    }
+    
+    func scrollToStart() {
+        endOffset = collectionView.frame.size.width
         collectionView.scrollToItem(
             at: IndexPath(item: 1, section: 0),
             at: .left,
             animated: true)
+    }
+    
+    func scrollToEnd() {
+        endOffset = CGFloat(dataModel.count - 2) * collectionView.frame.size.width
+        collectionView.scrollToItem(
+            at: IndexPath(item: dataModel.count - 2, section: 0),
+            at: .centeredHorizontally,
+            animated: false)
     }
 }
 
@@ -212,54 +219,42 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: UICollectionViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
         endOffset = scrollView.contentOffset.x
-        
         let currentIndexPath = Int(endOffset / collectionView.frame.width)
     
         switch currentIndexPath {
-        case 0:
-            
-            collectionView.scrollToItem(
-                at: IndexPath(item: dataModel.count - 2, section: 0),
-                at: .centeredHorizontally,
-                animated: false)
-            
-        case dataModel.count - 1:
-            
-            collectionView.scrollToItem(
-                at: IndexPath(item: 1, section: 0),
-                at: .centeredHorizontally,
-                animated: false)
-            
+        case 0:                     scrollToEnd()
+        case dataModel.count - 1:   scrollToStart()
         default: break
         }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         createTimer()
+        visibleCell.removeAll()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    
         let offset = scrollView.contentOffset.x
         let offsetCell = offset - endOffset
         
-        let cellArray = getSortedVisibleCells(offset: offsetCell)
-        if cellArray.count > 1 {
-            
+        if visibleCell.count < 2 {
+            visibleCell = getSortedVisibleCells(offset: offsetCell)
+        }
+        
+        if visibleCell.count > 1 {
             let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
             let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
             let parallaxScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
 
-            cellArray[0].sizeScale(value: sizeScaleValue.downScale)
-            cellArray[0].alphaScale(value: alphaScaleValue.downScale)
-            cellArray[0].parallaxScale(value: parallaxScaleValue.downScale)
+            visibleCell[0].sizeScale(value: sizeScaleValue.downScale)
+            visibleCell[0].alphaScale(value: alphaScaleValue.downScale)
+            visibleCell[0].parallaxScale(value: parallaxScaleValue.downScale)
 
-            if cellArray.count > 1 {
-                cellArray[1].sizeScale(value: sizeScaleValue.upScale)
-                cellArray[1].alphaScale(value: alphaScaleValue.upScale)
-                cellArray[1].parallaxScale(value: parallaxScaleValue.upScale)
+            if visibleCell.count > 1 {
+                visibleCell[1].sizeScale(value: sizeScaleValue.upScale)
+                visibleCell[1].alphaScale(value: alphaScaleValue.upScale)
+                visibleCell[1].parallaxScale(value: parallaxScaleValue.upScale)
             }
         }
     }

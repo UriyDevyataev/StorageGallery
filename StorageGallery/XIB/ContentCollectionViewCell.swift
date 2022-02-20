@@ -13,7 +13,6 @@ class ContentCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var equalWidth: NSLayoutConstraint!
 
     @IBOutlet weak var customContentView: UIView!
-    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
@@ -95,13 +94,12 @@ class ContentCollectionViewCell: UICollectionViewCell {
     
     private func configButtons() {
         imageLinkButton.setTitle("", for: .normal)
-        userLinkButton.setTitle("", for: .normal)
-        
-        imageLinkButton.backgroundColor = .lightGray.withAlphaComponent(0.5)
         imageLinkButton.tintColor = .white
+        imageLinkButton.backgroundColor = .lightGray.withAlphaComponent(0.5)
         
-        userLinkButton.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        userLinkButton.setTitle("", for: .normal)
         userLinkButton.tintColor = .white
+        userLinkButton.backgroundColor = .lightGray.withAlphaComponent(0.5)
     }
     
     private func configLabel() {
@@ -109,7 +107,6 @@ class ContentCollectionViewCell: UICollectionViewCell {
         
         nameLabel.font = UIFont(name: "Avenir Next Ultra Light",
                                 size: nameLabel.frame.height * 0.8)
-
         nameLabel.adjustsFontSizeToFitWidth = true
         
         nameLabel.layer.shadowColor = UIColor.black.cgColor
@@ -132,17 +129,6 @@ class ContentCollectionViewCell: UICollectionViewCell {
     func parallaxScale(value: CGFloat?) {
         
         guard let value = value else {return}
-//        var startValue: CGFloat = 0
-//
-//        if let startEqualWidth = normalEqualWidth {
-//            startValue = startEqualWidth
-//        } else {
-//            normalEqualWidth = equalWidth.multiplier
-//            startValue = normalEqualWidth!
-//        }
-//
-//        let newValue = startValue * value
-        
         let newValue = normalEqualWidthConstarint * value
         NSLayoutConstraint.setMultiplier(newValue, of: &equalWidth)
     }
