@@ -12,8 +12,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     let dataService = DataServiceImp()
+    var activityService = ActivityServiceImp.shared
     
-    var timer: Timer?
+    var curIndex = 1
     var endOffset: CGFloat = 0.0
     
     var dataModel = [ImageData]()
@@ -24,6 +25,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         config()
         receiveData()
+        activityService.delegate = self
     }
     
     func config() {
@@ -37,13 +39,10 @@ class ViewController: UIViewController {
             self.configModelToInfinity()
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                self.collectionView.scrollToItem(
-                    at: IndexPath(item: 1, section: 0),
-                    at: .left,
-                    animated: false)
+                self.scrollToStart(visible: false)
             }
         } error: { err in
-            print(err ?? "")
+            //print(err ?? "")
         }
     }
     
@@ -91,6 +90,7 @@ class ViewController: UIViewController {
         
         cell.imageLinkButtonTap = { [weak self] in
             guard let self = self else {return}
+            self.activityService.stopTimer()
             guard let controller = self.prepareWebViewController(
                 startLink: dataImage.photo_url) else {
                     return
@@ -99,7 +99,9 @@ class ViewController: UIViewController {
         }
         
         cell.userLinkButtonTap = { [weak self] in
+            
             guard let self = self else {return}
+            self.activityService.stopTimer()
             guard let controller = self.prepareWebViewController(
                 startLink: dataImage.user_url) else {
                     return
@@ -164,26 +166,14 @@ class ViewController: UIViewController {
         dataModel.append(saveFirst)
     }
     
-    func createTimer(){
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 5,
-                                         target: self,
-                                         selector: #selector(timerInretval),
-                                         userInfo: nil,
-                                         repeats: true)
-    }
-    
-    @objc func timerInretval(){
-        timer?.invalidate()
-        scrollToStart()
-    }
-    
-    func scrollToStart() {
+    func scrollToStart(visible: Bool) {
         endOffset = collectionView.frame.size.width
+        
         collectionView.scrollToItem(
             at: IndexPath(item: 1, section: 0),
             at: .left,
-            animated: true)
+            animated: visible)
+        
     }
     
     func scrollToEnd() {
@@ -192,6 +182,27 @@ class ViewController: UIViewController {
             at: IndexPath(item: dataModel.count - 2, section: 0),
             at: .centeredHorizontally,
             animated: false)
+    }
+    
+    func scrollTo(index: Int) {
+        endOffset = CGFloat(index) * collectionView.frame.size.width
+        collectionView.scrollToItem(
+            at: IndexPath(item: index, section: 0),
+            at: .centeredHorizontally,
+            animated: false)
+    }
+    
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        scrollTo(index: curIndex)
+        
+        UIView.animate(withDuration: 0.2) {
+            self.collectionView.alpha = 1
+        }
+    }
+
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        collectionView.alpha = 0
+        collectionView.reloadData()
     }
 }
 
@@ -222,15 +233,16 @@ extension ViewController: UICollectionViewDelegate {
         endOffset = scrollView.contentOffset.x
         let currentIndexPath = Int(endOffset / collectionView.frame.width)
     
+        curIndex = currentIndexPath
         switch currentIndexPath {
         case 0:                     scrollToEnd()
-        case dataModel.count - 1:   scrollToStart()
+        case dataModel.count - 1:   scrollToStart(visible: false)
         default: break
         }
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        createTimer()
+        activityService.startTimer()
         visibleCell.removeAll()
     }
 
@@ -242,7 +254,7 @@ extension ViewController: UICollectionViewDelegate {
             visibleCell = getSortedVisibleCells(offset: offsetCell)
         }
         
-        if visibleCell.count > 1 {
+        if visibleCell.count > 0 {
             let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
             let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
             let parallaxScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
@@ -265,5 +277,11 @@ extension ViewController: UICollectionViewDelegate {
 extension ViewController: UICollectionViewDelegateFlowLayout  {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
+    }
+}
+
+extension ViewController: ActivityServiceOut {
+    func notActivity() {
+        scrollToStart(visible: true)
     }
 }
