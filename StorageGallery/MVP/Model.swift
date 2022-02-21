@@ -7,9 +7,9 @@
 
 import Foundation
 
-//struct FileResponse: Codable {
-//    let dict: [String: ImageData]
-//}
+struct MainModel: Codable {
+    var data: [ImageData]
+}
 
 struct ImageData : Codable {
     var photoKey: String?

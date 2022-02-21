@@ -13,7 +13,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="StorageGallery" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainController" id="BYZ-38-t0r" customClass="ViewController" customModule="StorageGallery" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,7 +28,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="SNT-vj-rQ6">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ident" id="SNT-vj-rQ6">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Hwg-po-QCa">
@@ -101,43 +101,10 @@
             </objects>
             <point key="canvasLocation" x="715.94202898550725" y="97.767857142857139"/>
         </scene>
-        <!--Test View Controller-->
-        <scene sceneID="774-rS-YRV">
-            <objects>
-                <viewController id="A5n-84-Owl" customClass="TestViewController" customModule="StorageGallery" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fPT-2l-eqZ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dvc-l9-53Z">
-                                <rect key="frame" x="103.5" y="89.5" width="207" height="717"/>
-                                <color key="backgroundColor" systemColor="systemRedColor"/>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="sd5-Ta-VcK"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="dvc-l9-53Z" firstAttribute="height" secondItem="fPT-2l-eqZ" secondAttribute="height" multiplier="0.8" id="0WE-YK-cF1"/>
-                            <constraint firstItem="dvc-l9-53Z" firstAttribute="width" secondItem="fPT-2l-eqZ" secondAttribute="width" multiplier="0.5" id="Saz-JA-ew1"/>
-                            <constraint firstItem="dvc-l9-53Z" firstAttribute="centerX" secondItem="fPT-2l-eqZ" secondAttribute="centerX" id="SuX-MV-mGY"/>
-                            <constraint firstItem="dvc-l9-53Z" firstAttribute="centerY" secondItem="fPT-2l-eqZ" secondAttribute="centerY" id="qLt-TC-6bZ"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="square" destination="dvc-l9-53Z" id="6LU-1S-zHq"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rcb-8l-seO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1545" y="108"/>
-        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
