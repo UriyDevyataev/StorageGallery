@@ -17,6 +17,8 @@ class WebViewController: UIViewController {
     
     let activityService = ActivityServiceImp.shared
     
+    //MARK: - App life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configToolBar()
@@ -27,6 +29,8 @@ class WebViewController: UIViewController {
         super.viewWillDisappear(animated)
         activityService.startTimer()
     }
+    
+    //MARK: - Funcs configurations
     
     private func configToolBar(){
         configNavigationButton()
@@ -87,6 +91,8 @@ class WebViewController: UIViewController {
         
         toolBar.items = buttonArray
     }
+    
+    //MARK: - Actions
     
     @objc func actionReload(){
         webView.reload()

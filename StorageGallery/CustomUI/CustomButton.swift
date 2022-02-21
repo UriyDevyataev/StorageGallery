@@ -41,8 +41,4 @@ class CustomButton: UIButton {
         default: break
         }
     }
-    
-
-    
-
 }
