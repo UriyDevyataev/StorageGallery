@@ -30,21 +30,21 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHY-7D-7IX">
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHY-7D-7IX" customClass="CustomButton" customModule="StorageGallery" customModuleProvider="target">
                                 <rect key="frame" x="75" y="197.5" width="38.5" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="XHY-7D-7IX" secondAttribute="height" multiplier="1:1" id="kEc-kC-f3h"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="pencil.circle" catalog="system">
-                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="small"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="userLinkAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="W1E-qi-Jnz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7F-5j-Lf9">
-                                <rect key="frame" x="153.5" y="199.5" width="35" height="34.5"/>
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="2" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7F-5j-Lf9" customClass="CustomButton" customModule="StorageGallery" customModuleProvider="target">
+                                <rect key="frame" x="153.5" y="197.5" width="38.5" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="u7F-5j-Lf9" secondAttribute="height" multiplier="1:1" id="iVG-4y-M1g"/>
                                 </constraints>
@@ -62,7 +62,7 @@
                             <constraint firstItem="XHY-7D-7IX" firstAttribute="top" secondItem="6Qr-Jv-AEj" secondAttribute="bottom" constant="20" id="9jP-gO-rCp"/>
                             <constraint firstItem="XHY-7D-7IX" firstAttribute="height" secondItem="Maf-tH-JsK" secondAttribute="height" multiplier="0.15" id="DCZ-eQ-BJ2"/>
                             <constraint firstAttribute="trailing" secondItem="DaY-PT-Bow" secondAttribute="trailing" id="IQJ-XF-owG"/>
-                            <constraint firstItem="u7F-5j-Lf9" firstAttribute="height" secondItem="XHY-7D-7IX" secondAttribute="height" multiplier="0.906667" id="ODp-MI-dl5"/>
+                            <constraint firstItem="u7F-5j-Lf9" firstAttribute="height" secondItem="XHY-7D-7IX" secondAttribute="height" id="ODp-MI-dl5"/>
                             <constraint firstAttribute="bottom" secondItem="XHY-7D-7IX" secondAttribute="bottom" constant="20" id="Txh-H9-6gE"/>
                             <constraint firstAttribute="bottom" secondItem="DaY-PT-Bow" secondAttribute="bottom" id="V0V-hG-JII"/>
                             <constraint firstItem="6Qr-Jv-AEj" firstAttribute="height" secondItem="Maf-tH-JsK" secondAttribute="height" multiplier="0.15" id="ZUu-KH-LEO"/>
@@ -96,7 +96,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="pencil.circle" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
