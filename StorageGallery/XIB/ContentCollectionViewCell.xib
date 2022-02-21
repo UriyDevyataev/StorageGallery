@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -31,25 +32,25 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="1" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHY-7D-7IX" customClass="CustomButton" customModule="StorageGallery" customModuleProvider="target">
-                                <rect key="frame" x="75" y="197.5" width="38.5" height="38.5"/>
+                                <rect key="frame" x="80" y="197.5" width="38.5" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="XHY-7D-7IX" secondAttribute="height" multiplier="1:1" id="kEc-kC-f3h"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain">
-                                    <directionalEdgeInsets key="contentInsets" top="0.0" leading="0.0" bottom="0.0" trailing="0.0"/>
-                                </buttonConfiguration>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="B">
+                                    <color key="titleColor" name="AccentColor"/>
+                                </state>
                                 <connections>
                                     <action selector="userLinkAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="W1E-qi-Jnz"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="2" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7F-5j-Lf9" customClass="CustomButton" customModule="StorageGallery" customModuleProvider="target">
-                                <rect key="frame" x="153.5" y="197.5" width="38.5" height="38.5"/>
+                                <rect key="frame" x="148.5" y="197.5" width="38.5" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="u7F-5j-Lf9" secondAttribute="height" multiplier="1:1" id="iVG-4y-M1g"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="B"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="B"/>
                                 <connections>
                                     <action selector="imageLinkAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="CBp-C3-0bc"/>
                                 </connections>
@@ -58,7 +59,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="6Qr-Jv-AEj" secondAttribute="trailing" constant="10" id="6io-7f-FE8"/>
-                            <constraint firstItem="u7F-5j-Lf9" firstAttribute="leading" secondItem="Maf-tH-JsK" secondAttribute="centerX" constant="20" id="8tL-Fp-hBU"/>
+                            <constraint firstItem="u7F-5j-Lf9" firstAttribute="leading" secondItem="Maf-tH-JsK" secondAttribute="centerX" constant="15" id="8tL-Fp-hBU"/>
                             <constraint firstItem="XHY-7D-7IX" firstAttribute="top" secondItem="6Qr-Jv-AEj" secondAttribute="bottom" constant="20" id="9jP-gO-rCp"/>
                             <constraint firstItem="XHY-7D-7IX" firstAttribute="height" secondItem="Maf-tH-JsK" secondAttribute="height" multiplier="0.15" id="DCZ-eQ-BJ2"/>
                             <constraint firstAttribute="trailing" secondItem="DaY-PT-Bow" secondAttribute="trailing" id="IQJ-XF-owG"/>
@@ -68,7 +69,7 @@
                             <constraint firstItem="6Qr-Jv-AEj" firstAttribute="height" secondItem="Maf-tH-JsK" secondAttribute="height" multiplier="0.15" id="ZUu-KH-LEO"/>
                             <constraint firstItem="6Qr-Jv-AEj" firstAttribute="leading" secondItem="Maf-tH-JsK" secondAttribute="leading" constant="10" id="b1P-UR-Y4C"/>
                             <constraint firstItem="DaY-PT-Bow" firstAttribute="top" secondItem="Maf-tH-JsK" secondAttribute="top" id="hBY-Ku-cYn"/>
-                            <constraint firstItem="XHY-7D-7IX" firstAttribute="trailing" secondItem="Maf-tH-JsK" secondAttribute="centerX" constant="-20" id="o7w-HT-Ovw"/>
+                            <constraint firstItem="XHY-7D-7IX" firstAttribute="trailing" secondItem="Maf-tH-JsK" secondAttribute="centerX" constant="-15" id="o7w-HT-Ovw"/>
                             <constraint firstItem="u7F-5j-Lf9" firstAttribute="centerY" secondItem="XHY-7D-7IX" secondAttribute="centerY" id="qrD-e7-iAD"/>
                             <constraint firstItem="DaY-PT-Bow" firstAttribute="leading" secondItem="Maf-tH-JsK" secondAttribute="leading" id="ros-4M-wb3"/>
                         </constraints>
@@ -96,6 +97,9 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

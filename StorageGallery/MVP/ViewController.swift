@@ -11,39 +11,25 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
-    let dataService = DataServiceImp()
-    var activityService = ActivityServiceImp.shared
+    var presenter: PresenterInput!
+    var model: MainModel?
     
-    var curIndex = 1
+    var currentIndex = 1
     var endOffset: CGFloat = 0.0
     
-    var dataModel = [ImageData]()
-    var imageDict = [String: UIImage]()
     var visibleCell = [ContentCollectionViewCell]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
-        receiveData()
-        activityService.delegate = self
+        presenter.view = self
+        presenter.viewIsReady()
     }
+    
+    //MARK: - Funcs Configuration
     
     func config() {
         configCollectionView()
-    }
-    
-    func receiveData() {
-        dataService.receiveData {[weak self] dict in
-            guard let self = self else {return}
-            self.dataModel = dict
-            self.configModelToInfinity()
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-                self.scrollToStart(visible: false)
-            }
-        } error: { err in
-            //print(err ?? "")
-        }
     }
     
     func configCollectionView() {
@@ -64,22 +50,21 @@ class ViewController: UIViewController {
         collectionView.register(ContentCollectionViewCell.nib(), forCellWithReuseIdentifier: ContentCollectionViewCell.identifier)
     }
     
+    //MARK: - Funcs for cells
+    
     func fill(cell: ContentCollectionViewCell, indexPath: IndexPath) -> UICollectionViewCell {
         
         cell.indexPath = indexPath
         
-        let dataImage = dataModel[indexPath.row]
-        cell.nameLabel.text = dataImage.user_name
+        let dataImage = model?.data[indexPath.row]
+        cell.nameLabel.text = dataImage?.user_name
         
-        guard let imageKey = dataImage.photoKey else {return UICollectionViewCell()}
+        guard let imageKey = dataImage?.photoKey else {return UICollectionViewCell()}
         
-        if let image = imageDict[imageKey] {
+        if let image = presenter.cachedImage(key: imageKey) {
             cell.imageView.image = image
         } else {
-            dataService.loadImage(imageKey: imageKey) {[weak self] image in
-                guard let self = self else {return}
-                self.imageDict[imageKey] = image
-                
+            presenter.loadImage(key: imageKey) { image in
                 if cell.indexPath == indexPath {
                     DispatchQueue.main.async {
                         cell.imageView.image = image
@@ -90,36 +75,16 @@ class ViewController: UIViewController {
         
         cell.imageLinkButtonTap = { [weak self] in
             guard let self = self else {return}
-            self.activityService.stopTimer()
-            guard let controller = self.prepareWebViewController(
-                startLink: dataImage.photo_url) else {
-                    return
-                }
-            self.present(controller, animated: true)
+            self.presenter.actionShowWebController(
+                withLink: dataImage?.photo_url)
         }
         
         cell.userLinkButtonTap = { [weak self] in
-            
             guard let self = self else {return}
-            self.activityService.stopTimer()
-            guard let controller = self.prepareWebViewController(
-                startLink: dataImage.user_url) else {
-                    return
-                }
-            self.present(controller, animated: true)
+            self.presenter.actionShowWebController(
+                withLink: dataImage?.user_url)
         }
         return cell
-    }
-    
-    func prepareWebViewController(startLink: String) -> WebViewController? {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let controller  = storyboard.instantiateViewController(identifier: "WebViewControllerIdent") as? WebViewController {
-            controller.modalPresentationStyle = .formSheet
-            controller.url = URL(string: startLink)
-            return controller
-        } else {
-            return nil
-        }
     }
     
     func getSortedVisibleCells(offset: CGFloat) -> [ContentCollectionViewCell] {
@@ -145,7 +110,6 @@ class ViewController: UIViewController {
         
         let maxScale: CGFloat = 1
         let minScale: CGFloat = maxScale - withRange
-        
         var scale : (downScale: CGFloat, upScale: CGFloat) = (minScale, maxScale)
         
         let halfWidth = collectionView.frame.width / 2
@@ -160,26 +124,19 @@ class ViewController: UIViewController {
         return scale
     }
     
-    func configModelToInfinity() {
-        let saveFirst = dataModel.first!
-        dataModel.insert(dataModel.last!, at: 0)
-        dataModel.append(saveFirst)
-    }
-    
     func scrollToStart(visible: Bool) {
         endOffset = collectionView.frame.size.width
-        
         collectionView.scrollToItem(
             at: IndexPath(item: 1, section: 0),
             at: .left,
             animated: visible)
-        
     }
     
     func scrollToEnd() {
-        endOffset = CGFloat(dataModel.count - 2) * collectionView.frame.size.width
+        guard let count = model?.data.count else {return}
+        endOffset = CGFloat(count - 2) * collectionView.frame.size.width
         collectionView.scrollToItem(
-            at: IndexPath(item: dataModel.count - 2, section: 0),
+            at: IndexPath(item: count - 2, section: 0),
             at: .centeredHorizontally,
             animated: false)
     }
@@ -192,60 +149,27 @@ class ViewController: UIViewController {
             animated: false)
     }
     
-    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        scrollTo(index: curIndex)
-        
-        UIView.animate(withDuration: 0.2) {
-            self.collectionView.alpha = 1
-        }
-    }
-
+    //MARK: - Rotate Device
+    
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         collectionView.alpha = 0
         collectionView.reloadData()
     }
-}
-
-//MARK: - Extension UICollectionViewDataSource
-
-extension ViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataModel.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let contentCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: ContentCollectionViewCell.identifier,
-            for: indexPath) as? ContentCollectionViewCell else {return UICollectionViewCell()}
-    
-        let cell = fill(cell: contentCell, indexPath: indexPath)
-        return cell
-    }
-}
-
-//MARK: - Extension UICollectionViewDelegate
-
-extension ViewController: UICollectionViewDelegate {
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        endOffset = scrollView.contentOffset.x
-        let currentIndexPath = Int(endOffset / collectionView.frame.width)
-    
-        curIndex = currentIndexPath
-        switch currentIndexPath {
-        case 0:                     scrollToEnd()
-        case dataModel.count - 1:   scrollToStart(visible: false)
-        default: break
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        scrollTo(index: currentIndex)
+        UIView.animate(withDuration: 0.2) {
+            self.collectionView.alpha = 1
         }
     }
     
+    //MARK: - Scroll
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        activityService.startTimer()
+        presenter.userActivity()
         visibleCell.removeAll()
     }
-
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.x
         let offsetCell = offset - endOffset
@@ -270,6 +194,48 @@ extension ViewController: UICollectionViewDelegate {
             }
         }
     }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        guard let count = model?.data.count else {return}
+        endOffset = scrollView.contentOffset.x
+        currentIndex = Int(endOffset / collectionView.frame.width)
+        switch currentIndex {
+        case 0:         scrollToEnd()
+        case count - 1: scrollToStart(visible: false)
+        default: break
+        }
+    }
+    
+    //MARK: - UpdateView
+    
+    func updateView(model: MainModel) {
+        self.model = model
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            self.scrollToStart(visible: false)
+        }
+    }
+}
+
+//MARK: - Extension UICollectionViewDataSource
+
+extension ViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let count = model?.data.count else {return 0}
+        return count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        guard let contentCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: ContentCollectionViewCell.identifier,
+            for: indexPath) as? ContentCollectionViewCell else {return UICollectionViewCell()}
+    
+        let cell = fill(cell: contentCell, indexPath: indexPath)
+        return cell
+    }
 }
 
 //MARK: - Extension UICollectionViewDelegateFlowLayout
@@ -280,8 +246,18 @@ extension ViewController: UICollectionViewDelegateFlowLayout  {
     }
 }
 
-extension ViewController: ActivityServiceOut {
-    func notActivity() {
+//MARK: - Extension PresenterOutput
+extension ViewController: PresenterOutput {
+    
+    func setState(model: MainModel) {
+        updateView(model: model)
+    }
+    
+    func showWebController(controller: WebViewController) {
+        self.present(controller, animated: true)
+    }
+    
+    func scrollToStart() {
         scrollToStart(visible: true)
     }
 }

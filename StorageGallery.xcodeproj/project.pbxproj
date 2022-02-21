@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CB1B974527C2509E00DD53F3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B974427C2509E00DD53F3 /* TestViewController.swift */; };
 		CB1B974727C2A54700DD53F3 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B974627C2A54700DD53F3 /* CustomButton.swift */; };
 		CB1B974927C3916000DD53F3 /* ActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B974827C3916000DD53F3 /* ActivityService.swift */; };
+		CB1B974B27C3A62B00DD53F3 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B974A27C3A62B00DD53F3 /* Presenter.swift */; };
+		CB1B975027C3ADE500DD53F3 /* Accembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B974F27C3ADE500DD53F3 /* Accembly.swift */; };
 		CB50E69F27BEBAB800475BEE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50E69E27BEBAB800475BEE /* Extensions.swift */; };
-		CB50E6A127C0E9EB00475BEE /* examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB50E6A027C0E9EB00475BEE /* examples.swift */; };
 		CBF2035527BBA172008D5FDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035427BBA172008D5FDB /* AppDelegate.swift */; };
 		CBF2035727BBA172008D5FDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035627BBA172008D5FDB /* SceneDelegate.swift */; };
 		CBF2035927BBA172008D5FDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2035827BBA172008D5FDB /* ViewController.swift */; };
@@ -21,16 +21,16 @@
 		CBF2036B27BBA908008D5FDB /* ContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2036927BBA908008D5FDB /* ContentCollectionViewCell.swift */; };
 		CBF2036C27BBA908008D5FDB /* ContentCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBF2036A27BBA908008D5FDB /* ContentCollectionViewCell.xib */; };
 		CBF2036E27BBAC74008D5FDB /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2036D27BBAC74008D5FDB /* DataService.swift */; };
-		CBF2037227BBAD35008D5FDB /* FileResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2037127BBAD35008D5FDB /* FileResponse.swift */; };
+		CBF2037227BBAD35008D5FDB /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2037127BBAD35008D5FDB /* Model.swift */; };
 		CBFED08527BC0F8A0012F5A8 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFED08427BC0F8A0012F5A8 /* WebViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CB1B974427C2509E00DD53F3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		CB1B974627C2A54700DD53F3 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		CB1B974827C3916000DD53F3 /* ActivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityService.swift; sourceTree = "<group>"; };
+		CB1B974A27C3A62B00DD53F3 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
+		CB1B974F27C3ADE500DD53F3 /* Accembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accembly.swift; sourceTree = "<group>"; };
 		CB50E69E27BEBAB800475BEE /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		CB50E6A027C0E9EB00475BEE /* examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = examples.swift; sourceTree = "<group>"; };
 		CBF2035127BBA172008D5FDB /* StorageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StorageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBF2035427BBA172008D5FDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBF2035627BBA172008D5FDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 		CBF2036927BBA908008D5FDB /* ContentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCollectionViewCell.swift; sourceTree = "<group>"; };
 		CBF2036A27BBA908008D5FDB /* ContentCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentCollectionViewCell.xib; sourceTree = "<group>"; };
 		CBF2036D27BBAC74008D5FDB /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
-		CBF2037127BBAD35008D5FDB /* FileResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileResponse.swift; sourceTree = "<group>"; };
+		CBF2037127BBAD35008D5FDB /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		CBFED08427BC0F8A0012F5A8 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,6 +57,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB1B974E27C3AD9700DD53F3 /* MVP */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B974F27C3ADE500DD53F3 /* Accembly.swift */,
+				CBF2037127BBAD35008D5FDB /* Model.swift */,
+				CBF2035827BBA172008D5FDB /* ViewController.swift */,
+				CB1B974A27C3A62B00DD53F3 /* Presenter.swift */,
+				CBFED08427BC0F8A0012F5A8 /* WebViewController.swift */,
+				CBF2035A27BBA172008D5FDB /* Main.storyboard */,
+			);
+			path = MVP;
+			sourceTree = "<group>";
+		};
+		CB1B975127C3AF2000DD53F3 /* CustomUI */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B974627C2A54700DD53F3 /* CustomButton.swift */,
+			);
+			path = CustomUI;
+			sourceTree = "<group>";
+		};
+		CB1B975227C3AF4D00DD53F3 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				CBF2035627BBA172008D5FDB /* SceneDelegate.swift */,
+				CBF2035427BBA172008D5FDB /* AppDelegate.swift */,
+				CB50E69E27BEBAB800475BEE /* Extensions.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		CBF2034827BBA172008D5FDB = {
 			isa = PBXGroup;
 			children = (
@@ -76,21 +107,14 @@
 		CBF2035327BBA172008D5FDB /* StorageGallery */ = {
 			isa = PBXGroup;
 			children = (
-				CBF2037027BBACEF008D5FDB /* Models */,
+				CB1B974E27C3AD9700DD53F3 /* MVP */,
 				CBF2036F27BBAC7C008D5FDB /* Services */,
 				CBF2036827BBA89F008D5FDB /* XIB */,
-				CBF2035427BBA172008D5FDB /* AppDelegate.swift */,
-				CBF2035627BBA172008D5FDB /* SceneDelegate.swift */,
-				CBF2035827BBA172008D5FDB /* ViewController.swift */,
-				CB1B974627C2A54700DD53F3 /* CustomButton.swift */,
-				CBFED08427BC0F8A0012F5A8 /* WebViewController.swift */,
-				CB50E69E27BEBAB800475BEE /* Extensions.swift */,
-				CB1B974427C2509E00DD53F3 /* TestViewController.swift */,
-				CBF2035A27BBA172008D5FDB /* Main.storyboard */,
+				CB1B975127C3AF2000DD53F3 /* CustomUI */,
+				CB1B975227C3AF4D00DD53F3 /* Other */,
 				CBF2035D27BBA174008D5FDB /* Assets.xcassets */,
 				CBF2035F27BBA174008D5FDB /* LaunchScreen.storyboard */,
 				CBF2036227BBA174008D5FDB /* Info.plist */,
-				CB50E6A027C0E9EB00475BEE /* examples.swift */,
 			);
 			path = StorageGallery;
 			sourceTree = "<group>";
@@ -111,14 +135,6 @@
 				CB1B974827C3916000DD53F3 /* ActivityService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		CBF2037027BBACEF008D5FDB /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				CBF2037127BBAD35008D5FDB /* FileResponse.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,18 +209,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB1B974527C2509E00DD53F3 /* TestViewController.swift in Sources */,
 				CBF2036B27BBA908008D5FDB /* ContentCollectionViewCell.swift in Sources */,
-				CBF2037227BBAD35008D5FDB /* FileResponse.swift in Sources */,
+				CBF2037227BBAD35008D5FDB /* Model.swift in Sources */,
 				CBF2035927BBA172008D5FDB /* ViewController.swift in Sources */,
 				CB50E69F27BEBAB800475BEE /* Extensions.swift in Sources */,
 				CBF2035527BBA172008D5FDB /* AppDelegate.swift in Sources */,
 				CBFED08527BC0F8A0012F5A8 /* WebViewController.swift in Sources */,
 				CB1B974727C2A54700DD53F3 /* CustomButton.swift in Sources */,
-				CB50E6A127C0E9EB00475BEE /* examples.swift in Sources */,
 				CBF2035727BBA172008D5FDB /* SceneDelegate.swift in Sources */,
+				CB1B974B27C3A62B00DD53F3 /* Presenter.swift in Sources */,
 				CB1B974927C3916000DD53F3 /* ActivityService.swift in Sources */,
 				CBF2036E27BBAC74008D5FDB /* DataService.swift in Sources */,
+				CB1B975027C3ADE500DD53F3 /* Accembly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
