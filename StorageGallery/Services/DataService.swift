@@ -10,7 +10,6 @@ import UIKit
 
 protocol DataService {
     
-//    func receiveData(success: @escaping ([String: ImageData]) -> Void, error: @escaping (Error?) -> Void)
     func receiveData(success: @escaping ([ImageData]) -> Void, error: @escaping (Error?) -> Void)
     func loadImage(imageKey: String, handler: @escaping (UIImage?) -> Void)
 }

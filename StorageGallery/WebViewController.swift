@@ -15,10 +15,17 @@ class WebViewController: UIViewController {
     
     var url: URL?
     
+    let activityService = ActivityServiceImp.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configToolBar()
         configWebView()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        activityService.startTimer()
     }
     
     private func configToolBar(){
