@@ -22,7 +22,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         config()
-        presenter.view = self
         presenter.viewIsReady()
     }
     
@@ -58,7 +57,7 @@ class ViewController: UIViewController {
         
         let dataImage = model?.data[indexPath.row]
         cell.nameLabel.text = dataImage?.user_name
-        
+    
         guard let imageKey = dataImage?.photoKey else {return UICollectionViewCell()}
         
         if let image = presenter.cachedImage(key: imageKey) {
@@ -128,7 +127,7 @@ class ViewController: UIViewController {
         endOffset = collectionView.frame.size.width
         collectionView.scrollToItem(
             at: IndexPath(item: 1, section: 0),
-            at: .left,
+            at: .centeredHorizontally,
             animated: visible)
     }
     
@@ -157,6 +156,7 @@ class ViewController: UIViewController {
     }
     
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        presenter.userActivity()
         scrollTo(index: currentIndex)
         UIView.animate(withDuration: 0.2) {
             self.collectionView.alpha = 1
@@ -166,7 +166,6 @@ class ViewController: UIViewController {
     //MARK: - Scroll
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        presenter.userActivity()
         visibleCell.removeAll()
     }
     
@@ -177,7 +176,7 @@ class ViewController: UIViewController {
         if visibleCell.count < 2 {
             visibleCell = getSortedVisibleCells(offset: offsetCell)
         }
-        
+
         if visibleCell.count > 0 {
             let sizeScaleValue = getScale(forOffset: offsetCell, withRange: 0.1)
             let alphaScaleValue = getScale(forOffset: offsetCell, withRange: 0.3)
@@ -196,7 +195,7 @@ class ViewController: UIViewController {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
+        presenter.userActivity()
         guard let count = model?.data.count else {return}
         endOffset = scrollView.contentOffset.x
         currentIndex = Int(endOffset / collectionView.frame.width)

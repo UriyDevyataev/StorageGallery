@@ -52,3 +52,24 @@ extension NSLayoutConstraint {
         constraint = newConstraint
     }
 }
+
+extension String {
+    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
+        return boundingBox.height
+    }
+    
+    func sizeWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGSize {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+//        let font = UIFont.systemFont(ofSize: 1000)
+        
+        let boundingBox = self.boundingRect(
+            with: constraintRect,
+            options: [.usesFontLeading],
+            attributes: [NSAttributedString.Key.font: font],
+            context: nil)
+        
+        return boundingBox.size
+    }
+}

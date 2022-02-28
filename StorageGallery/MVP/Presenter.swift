@@ -12,7 +12,7 @@ import UIKit
 
 protocol PresenterInput {
     
-    var view: PresenterOutput? {get set}
+    var view: PresenterOutput? { get }
     
     func viewIsReady()
     func actionShowWebController(withLink: String?)
@@ -31,9 +31,7 @@ protocol PresenterOutput: AnyObject {
 
 class PresenterImp: PresenterInput {
     
-    
-    
-    var view: PresenterOutput?
+    weak var view: PresenterOutput?
     
     var dataService: DataService?
     var activityService: ActivityService?
